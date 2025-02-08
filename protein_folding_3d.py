@@ -80,6 +80,9 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
         if len(trajectory) % 20 == 0:
             print(len(trajectory))
 
+    callback_type = ctypes.CFUNCTYPE(None, ctypes.POINTER(ctypes.c_double))
+    callback_func = callback_type(callback)
+
     # Flatten the initial positions for optimization
     positions_flat = positions.flatten()
 
