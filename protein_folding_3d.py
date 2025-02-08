@@ -75,6 +75,11 @@ energy_bfgs.bfgs_optimizer.restype = None
 def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6, kb=1.0, b=1.0, epsilon=1.0, sigma=1.0):
     trajectory = []
 
+    def callback(x):
+        trajectory.append(x.reshape((n_beads, -1)))
+        if len(trajectory) % 20 == 0:
+            print(len(trajectory))
+
     # Flatten the initial positions for optimization
     positions_flat = positions.flatten()
 
