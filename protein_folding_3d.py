@@ -77,7 +77,7 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
 
     def callback(positions_ptr):
     # Convert ctypes pointer to a NumPy array
-        positions = np.ctypeslib.as_array(positions_ptr, shape=(n_beads, 3))
+        positions = np.ctypeslib.as_array(positions_ptr, shape=(n_beads, -1))
     
     # Append the reshaped array to the trajectory
         trajectory.append(positions)
@@ -110,7 +110,7 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
         print(f'Writing data to file {csv_filepath}')
         np.savetxt(csv_filepath, trajectory[-1], delimiter=",")
     
-    return positions_flat.reshape((n_beads, 3)), trajectory
+    return positions_flat.reshape((n_beads, -1)), trajectory
 
 # 3D visualization function
 def plot_protein_3d(positions, title="Protein Conformation", ax=None):
