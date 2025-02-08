@@ -75,6 +75,10 @@ energy_bfgs.bfgs_optimizer.restype = None
 def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6, kb=1.0, b=1.0, epsilon=1.0, sigma=1.0):
     trajectory = []
 
+    class OptimizeResult:
+        def __init__(self, x):
+            self.x = x  # Store the optimized positions as the 'x' attribute
+
     def callback(positions_ptr):
     # Convert ctypes pointer to a NumPy array
         positions = np.ctypeslib.as_array(positions_ptr, shape=(n_beads, 3))
@@ -105,12 +109,16 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
         callback_func
     )
 
+    optimized_positions = positions_flat.reshape((n_beads, 3))
+
+    result = OptimizeResult(optimized_positions)
+
     if write_csv:
         csv_filepath = f'protein{n_beads}.csv'
         print(f'Writing data to file {csv_filepath}')
         np.savetxt(csv_filepath, trajectory[-1], delimiter=",")
     
-    return positions_flat, trajectory
+    return result, trajectory
 
 # 3D visualization function
 def plot_protein_3d(positions, title="Protein Conformation", ax=None):
