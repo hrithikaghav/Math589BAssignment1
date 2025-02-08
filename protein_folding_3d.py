@@ -92,7 +92,8 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
         n_beads,
         maxiter,
         tol,
-        H.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+        H.ctypes.data_as(ctypes.POINTER(ctypes.c_double)),
+        callback_func
     )
 
     if write_csv:
