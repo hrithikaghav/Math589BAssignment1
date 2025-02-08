@@ -79,7 +79,7 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
         def __init__(self, x):
             self.x = x  # Store the optimized positions as the 'x' attribute
 
-   def callback(positions_ptr):
+    def callback(positions_ptr):
        positions_flat = np.ctypeslib.as_array(positions_ptr, shape=(n_beads * 3,))  
        positions = positions_flat.reshape((n_beads, 3))  # Explicit reshape
     
