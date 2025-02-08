@@ -109,7 +109,7 @@ void bfgs_update(double *H, double *s, double *y, int n) {
 extern void callback(double *positions);  // This will be called from Python
 
 // Main BFGS optimization loop
-void bfgs_optimizer(double *positions, int n_beads, int maxiter, double tol, double *H) {
+void bfgs_optimizer(double *positions, int n_beads, int maxiter, double tol, double *H, callback_t callback) {
     int n = n_beads * DIM;
     double gradient[n];
     double delta_x[n];
