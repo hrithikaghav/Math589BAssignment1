@@ -106,7 +106,7 @@ void bfgs_update(double *H, double *s, double *y, int n) {
 }
 
 // External callback function
-extern void callback_t(double *positions);  // This will be called from Python
+typedef void (*callback_t)(double *positions);
 
 // Main BFGS optimization loop
 void bfgs_optimizer(double *positions, int n_beads, int maxiter, double tol, double *H, callback_t callback) {
