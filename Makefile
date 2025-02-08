@@ -2,6 +2,9 @@ CXX = g++
 CXXFLAGS = -Wall -ggdb3 -O5
 LDFLAGS = -L. -lm
 
+gcc -c energy_bfgs.c -o energy_bfgs.o
+gcc -shared -o energy_bfgs.so energy_bfgs.o -fPIC
+
 all: libenergy.so grad_w_armijo bfgs_w_classes bfgs_w_varargs
 
 libenergy.so: energy.cpp energy.hpp
