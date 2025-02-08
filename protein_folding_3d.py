@@ -76,7 +76,6 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
     trajectory = []
 
     def callback(x):
-        trajectory.append(x.reshape((n_beads, -1)))
         if len(trajectory) % 20 == 0:
             print(len(trajectory))
 
