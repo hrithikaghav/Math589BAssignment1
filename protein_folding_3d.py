@@ -79,19 +79,17 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
         def __init__(self, x):
             self.x = x  # Store the optimized positions as the 'x' attribute
 
-    def callback(positions_ptr):
-    # Convert ctypes pointer to a NumPy array
-        positions = np.ctypeslib.as_array(positions_ptr, shape=(n_beads, 3))
+   def callback(positions_ptr):
+       positions_flat = np.ctypeslib.as_array(positions_ptr, shape=(n_beads * 3,))  
+       positions = positions_flat.reshape((n_beads, 3))  # Explicit reshape
     
-    # Append the reshaped array to the trajectory
-        if positions.shape != (n_beads, 3):
-           raise ValueError(f"Unexpected shape: {positions.shape}, expected ({n_beads}, 3)")
+       if positions.shape != (n_beads, 3):
+          raise ValueError(f"Unexpected shape: {positions.shape}, expected ({n_beads}, 3)")
 
-    # Append the reshaped array to the trajectory
-        trajectory.append(positions.copy())  
+       trajectory.append(positions.copy())  
     
-        if len(trajectory) % 20 == 0:
-           print(f"Step {len(trajectory)}")
+       if len(trajectory) % 20 == 0:
+          print(f"Step {len(trajectory)}")
 
     callback_type = ctypes.CFUNCTYPE(None, ctypes.POINTER(ctypes.c_double))
     callback_func = callback_type(callback)
