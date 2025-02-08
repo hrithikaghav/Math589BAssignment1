@@ -75,16 +75,10 @@ energy_bfgs.bfgs_optimizer.restype = None
 def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6, kb=1.0, b=1.0, epsilon=1.0, sigma=1.0):
     trajectory = []
 
-def callback(positions_ptr):
-    # Convert ctypes pointer to a NumPy array
-    positions = np.ctypeslib.as_array(positions_ptr, shape=(n_beads, 3))
-    
-    # Append the reshaped array to the trajectory
-    trajectory.append(positions)
-    
-    # Optionally, print every 20 steps to track progress
-    if len(trajectory) % 20 == 0:
-        print(f"Step {len(trajectory)}")
+    def callback(x):
+        trajectory.append(x.reshape((n_beads, -1)))
+        if len(trajectory) % 20 == 0:
+            print(len(trajectory))
 
     callback_type = ctypes.CFUNCTYPE(None, ctypes.POINTER(ctypes.c_double))
     callback_func = callback_type(callback)
