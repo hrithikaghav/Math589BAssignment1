@@ -72,7 +72,7 @@ energy_bfgs.bfgs_optimizer.argtypes = [
 ]
 energy_bfgs.bfgs_optimizer.restype = None
 
-def optimize_protein(positions, n_beads, maxiter=1000, tol=1e-6, kb=1.0, b=1.0, epsilon=1.0, sigma=1.0):
+def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6, kb=1.0, b=1.0, epsilon=1.0, sigma=1.0):
     trajectory = []
 
     # Flatten the initial positions for optimization
@@ -89,6 +89,11 @@ def optimize_protein(positions, n_beads, maxiter=1000, tol=1e-6, kb=1.0, b=1.0, 
         tol,
         H.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
     )
+
+    if write_csv:
+        csv_filepath = f'protein{n_beads}.csv'
+        print(f'Writing data to file {csv_filepath}')
+        np.savetxt(csv_filepath, trajectory[-1], delimiter=",")
     
     return positions_flat.reshape((n_beads, 3)), trajectory
 
