@@ -105,6 +105,9 @@ void bfgs_update(double *H, double *s, double *y, int n) {
     }
 }
 
+// External callback function
+extern void callback(double *positions);  // This will be called from Python
+
 // Main BFGS optimization loop
 void bfgs_optimizer(double *positions, int n_beads, int maxiter, double tol, double *H) {
     int n = n_beads * DIM;
@@ -130,8 +133,8 @@ void bfgs_optimizer(double *positions, int n_beads, int maxiter, double tol, dou
         // Update step: delta_x = -H * gradient
         multiply(H, gradient, delta_x, n);
         
-        // Perform line search 
-        double step_size = 0.01; 
+        // Perform line search (simplified for now)
+        double step_size = 0.01;  // Simple fixed step size
         for (int i = 0; i < n; i++) {
             positions[i] -= step_size * delta_x[i];
         }
@@ -148,5 +151,8 @@ void bfgs_optimizer(double *positions, int n_beads, int maxiter, double tol, dou
 
         // Update the inverse Hessian approximation (BFGS formula)
         bfgs_update(H, s, y, n);
+
+        // Call the Python callback function with the current positions
+        callback(positions);  // This will call the Python callback to track the trajectory
     }
 }
