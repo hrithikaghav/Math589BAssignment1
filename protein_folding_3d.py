@@ -112,6 +112,9 @@ def optimize_protein(positions, n_beads, write_csv=False, maxiter=1000, tol=1e-6
         callback_func
     )
 
+    if positions_flat.size != n_beads * 3:
+        raise ValueError(f"After optimization, positions_flat size mismatch: expected {n_beads * 3}, got {positions_flat.size}")
+        
     optimized_positions = positions_flat.reshape((n_beads, 3))
 
     result = OptimizeResult(optimized_positions)
